@@ -25,6 +25,17 @@ termFoldr var neg conj disj t =
 data TermNF =
     PosVarNF String
   | NegVarNF String
-  | CONJ_nf TermNF TermNF
-  | DISJ_nf TermNF TermNF
+  | ConjNF TermNF TermNF
+  | DisjNF TermNF TermNF
   deriving (Eq, Show, Read)
+
+termNFFoldr :: (String -> a) -> (String -> a) -> (a -> a -> a) -> (a -> a -> a) -> TermNF -> a
+termNFFoldr posvar negvar conj disj t =
+  let visit (PosVarNF x)      = posvar x
+      visit (NegVarNF x)     = negvar x
+      visit (ConjNF t1 t2) = conj (visit t1) (visit t2)
+      visit (DisjNF t1 t2) = disj (visit t1) (visit t2)
+  in visit t
+
+dualize :: TermNF -> TermNF
+dualize = termNFFoldr NegVarNF PosVarNF DisjNF ConjNF

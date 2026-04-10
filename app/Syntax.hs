@@ -5,7 +5,7 @@ data Term =
   | Neg Term
   | Conj Term Term
   | Disj Term Term
-  deriving (Eq)
+  deriving (Eq, Read)
 
 instance Show Term where
   show (Var s) = s

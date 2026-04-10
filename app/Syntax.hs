@@ -39,3 +39,6 @@ termNFFoldr posvar negvar conj disj t =
 
 dualize :: TermNF -> TermNF
 dualize = termNFFoldr NegVarNF PosVarNF DisjNF ConjNF
+
+embed :: TermNF -> Term
+embed = termNFFoldr Var (\x -> Neg (Var x)) Conj Disj
